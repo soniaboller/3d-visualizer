@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d65aa4ac-cb48-402e-ae40-f25bcc5c324e" name="Default" comment="" />
+    <list default="true" id="d65aa4ac-cb48-402e-ae40-f25bcc5c324e" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/audioLoader.js" afterPath="$PROJECT_DIR$/scripts/audioLoader.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripts/particle.js" afterPath="$PROJECT_DIR$/scripts/particle.js" />
+    </list>
     <ignored path="3d-visualizer.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -26,8 +29,8 @@
       <file leaf-file-name="particle.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/particle.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="372">
-              <caret line="49" column="49" selection-start-line="49" selection-start-column="49" selection-end-line="49" selection-end-column="49" />
+            <state relative-caret-position="1287">
+              <caret line="320" column="1" selection-start-line="320" selection-start-column="1" selection-end-line="320" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -79,8 +82,8 @@
       <file leaf-file-name="audioLoader.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/audioLoader.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="312">
-              <caret line="49" column="43" selection-start-line="49" selection-start-column="31" selection-end-line="49" selection-end-column="43" />
+            <state relative-caret-position="135">
+              <caret line="9" column="26" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
               <folding />
             </state>
           </provider>
@@ -174,12 +177,12 @@
       <option name="presentableId" value="Default" />
       <updated>1489008357814</updated>
       <workItem from="1489008359371" duration="3859000" />
-      <workItem from="1489022226375" duration="1562000" />
+      <workItem from="1489022226375" duration="2439000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5421000" />
+    <option name="totallyTimeSpent" value="6298000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="773" extended-state="6" />
@@ -307,16 +310,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/audioLoader.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="49" column="43" selection-start-line="49" selection-start-column="31" selection-end-line="49" selection-end-column="43" />
+        <state relative-caret-position="135">
+          <caret line="9" column="26" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/scripts/particle.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="49" column="49" selection-start-line="49" selection-start-column="49" selection-end-line="49" selection-end-column="49" />
+        <state relative-caret-position="1287">
+          <caret line="320" column="1" selection-start-line="320" selection-start-column="1" selection-end-line="320" selection-end-column="1" />
           <folding />
         </state>
       </provider>

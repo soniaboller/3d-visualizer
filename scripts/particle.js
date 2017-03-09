@@ -39,7 +39,6 @@ var GuiControls = function(){
     this.square = false;
     this.infinity = false;
     this.longDonut2 = false;
-
 };
 
 var matrix = new GuiControls();
@@ -60,13 +59,6 @@ document.body.appendChild( stats.dom );
 init();
 
 function init() {
-    // var colors;
-    // var redColors = [0xff0000, 0xb20000, 0x7f0000, 0x000000, 0xffffff];
-    // var orangeColors = [0xffd700, 0xffa500, 0xff8c00, 0x000000, 0xffffff];
-    // var yellowColors = [0xffff66, 0xffff00, 0x999900, 0x000000, 0xffffff];
-    // var greenColors = [0x00ff00, 0x00b200, 0x006600, 0x000000, 0xffffff];
-    // var blueColors = [ 0x0900ff, 0x0078ff, 0x00f9ff, 0x000000, 0xffffff];
-    // var purpleColors = [0xee82ee, 0xff00ff, 0x9400d3, 0xffffff];
     for (var i = 0; i < 1024; i++) {
         var geometry = new THREE.Geometry();
         var vertex = new THREE.Vector3();
@@ -127,14 +119,6 @@ function render() {
         // var prevPoint = points[j-1];
         var n = 1;
         n +=2;
-
-        // point.geometry.vertices[0].x *= Math.sin(j/10);
-        // point.geometry.vertices[0].y *= Math.sin(j/10);
-        // point.geometry.vertices[0].z *= Math.sin(j/10);
-
-        // point.position.x *= Math.sin(j);
-        // point.position.y *= Math.sin(j);
-        // point.position.z *= Math.sin(j);
 
         var timer = Date.now() - start;
         point.geometry.colorsNeedUpdate = true;
@@ -234,10 +218,6 @@ function render() {
 
     }
     matrix.angle += matrix.animationSpeed;
-    // vertex.z = 20 * Math.sin(i/10);
-    // vertex.y = 20 * Math.cos(i/10);
-    // // vertex.y = i/100 * Math.cos(i/10) - i/100 * Math.sin(i/10);
-    // vertex.x = 20 * Math.tan(i/100);
 
     var x = camera.position.x;
     var z = camera.position.z;
@@ -339,23 +319,3 @@ function onKeyDown(e) {
             break;
     }
 }
-
-
-// var neither = [];
-// var two = [];
-// var three= [];
-// for (var j = 0; j < 2048; j++){
-//
-//     if (j%3 !== 0 && j%2 !==0){
-//         neither.push(j)
-//     }
-//     else if (j%3 === 0){
-//         two.push(j);
-//     }
-//     else if(j%2 === 0){
-//         three.push(j)
-//     }
-//     console.log(neither, 'neither');
-//     console.log(two, 'two');
-//     console.log(three, 'three');
-// }
