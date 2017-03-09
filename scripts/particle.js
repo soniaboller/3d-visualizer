@@ -59,7 +59,7 @@ document.body.appendChild( stats.dom );
 init();
 
 function init() {
-    for (var i = 0; i < 1024; i++) {
+    for (var i = 0; i <= 1024; i++) {
         var geometry = new THREE.Geometry();
         var vertex = new THREE.Vector3();
         // vertex.x = 20 * Math.sin(i/10) * Math.cos(i);
@@ -75,12 +75,12 @@ function init() {
             opacity: 1,
             sizeAttenuation: true
         } );
-        var mesh = new THREE.Points( geometry, material );
-        mesh.position.x = 20 * Math.sin(i/10) * Math.cos(i);
-        mesh.position.y = 20 * Math.cos(i/10);
-        mesh.position.z = 20 * Math.sin(i) * Math.sin(i/10);
-        scene.add( mesh );
-        points.push( mesh );
+        var particle = new THREE.Points( geometry, material );
+        particle.position.x = 20 * Math.sin(i/10) * Math.cos(i);
+        particle.position.y = 20 * Math.cos(i/10);
+        particle.position.z = 20 * Math.sin(i) * Math.sin(i/10);
+        scene.add( particle );
+        points.push( particle );
     }
     document.addEventListener('mousemove', onMouseMove, false);
     window.addEventListener('resize', onWindowResize, false);
