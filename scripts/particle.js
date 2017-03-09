@@ -7,6 +7,7 @@ var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 var start = Date.now();
+var xSeparation = 1.05, ySeparation = 1.05, xNum = 45, yNum = 45,
 
 container = document.createElement('div');
 container.setAttribute('id', 'container');
@@ -30,7 +31,7 @@ var GuiControls = function(){
     this.R = 0;
     this.G = 0;
     this.B = 0;
-    this.colorIntensity = 0.5;
+    this.colorIntensity = 0.33;
     this.rotationSpeed = 0.0001;
     this.sphere = true;
     this.donut = false;
@@ -49,7 +50,7 @@ gui.closed = true;
 gui.add(matrix, 'angle', 0, 25).step(0.1).name('Particle Angle');
 gui.add(matrix, 'animationSpeed', 0.0000001, 0.01).step(0.00001).name('Animation Speed');
 gui.add(matrix, 'intensity', 0.5, 5).step(0.1).name('Reaction Intensity');
-gui.add(matrix, 'colorIntensity', 0.5, 5).step(1).name('Color Intensity');
+gui.add(matrix, 'colorIntensity', 0.25, 5).step(0.25).name('Color Intensity');
 gui.add(matrix, 'zoomSpeed', 0.001, 0.1).step(0.001).name('Zoom Speed');
 gui.add(matrix, 'rotationSpeed', 0, 0.1).step(0.000005).name('Z-index Rotation Speed');
 
@@ -82,6 +83,10 @@ function init() {
         scene.add( particle );
         points.push( particle );
     }
+    // var sphereGeo = new THREE.SphereGeometry( 10, 32, 32 );
+    // var sphereMat = new THREE.MeshBasicMaterial( {color: 0xffffff, transparent: true, opacity: 0.33} );
+    // var sphere = new THREE.Mesh( sphereGeo, sphereMat );
+    // scene.add( sphere );
     document.addEventListener('mousemove', onMouseMove, false);
     window.addEventListener('resize', onWindowResize, false);
     document.addEventListener('keydown', onKeyDown, false);
@@ -148,12 +153,10 @@ function render() {
         // point.geometry.colors[0].g = G;
         // point.geometry.colors[0].b = B;
 
-        point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j) + Math.cos(j));
-        point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
-        point.position.z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle) + Math.sin(j));
+        // point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j) + Math.cos(j));
+        // point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
+        // point.position.z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle) + Math.sin(j));
         // point.position.z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle)) + (Math.abs( Math.cos( timer * 0.002 ) ));
-
-
 
         // OG
         if(matrix.sphere){
@@ -206,15 +209,10 @@ function render() {
             point.position.z = matrix.spacing * (Math.sin(j) + Math.sin(j/matrix.angle));
         }
 
-
-
-
         // star thang rotation speed = 0.00413
         // point.position.y = matrix.spacing * (Math.cos(j/matrix.angle) * Math.cos(j) / Math.sin(j));
         // point.position.z = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
         // point.position.x = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle) / Math.cos(j));
-
-
 
     }
     matrix.angle += matrix.animationSpeed;
