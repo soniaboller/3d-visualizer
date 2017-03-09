@@ -47,7 +47,7 @@ window.onload = function () {
     }
 
     function getMicInput(){
-        navigator.mediaDevices.getUserMedia({audio: true}).then(function(stream) {
+        navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(function(stream) {
             app.ctx = new (window.AudioContext || window.webkitAudioContext)();
             source = app.ctx.createBufferSource();
             analyser = app.ctx.createAnalyser();
