@@ -60,13 +60,6 @@ document.body.appendChild( stats.dom );
 init();
 
 function init() {
-    // var colors;
-    // var redColors = [0xff0000, 0xb20000, 0x7f0000, 0x000000, 0xffffff];
-    // var orangeColors = [0xffd700, 0xffa500, 0xff8c00, 0x000000, 0xffffff];
-    // var yellowColors = [0xffff66, 0xffff00, 0x999900, 0x000000, 0xffffff];
-    // var greenColors = [0x00ff00, 0x00b200, 0x006600, 0x000000, 0xffffff];
-    // var blueColors = [ 0x0900ff, 0x0078ff, 0x00f9ff, 0x000000, 0xffffff];
-    // var purpleColors = [0xee82ee, 0xff00ff, 0x9400d3, 0xffffff];
     for (var i = 0; i < 1024; i++) {
         var geometry = new THREE.Geometry();
         var vertex = new THREE.Vector3();
@@ -78,7 +71,6 @@ function init() {
         // geometry.colors.push(new THREE.Color(purpleColors[ Math.floor(Math.random() * purpleColors.length) ]));
         geometry.colors.push(new THREE.Color(0xffffff));
         var material = new THREE.PointsMaterial( {
-            size: 0.33,
             vertexColors: THREE.VertexColors,
             depthTest: true,
             opacity: 1,
@@ -138,6 +130,7 @@ function render() {
 
         var timer = Date.now() - start;
         point.geometry.colorsNeedUpdate = true;
+        point.material.size = 0.33 + (timeFloatData[j]/2);
 
         if (j%3 !== 0 && j%2 !==0){
             // this stream mixes with the next stream
