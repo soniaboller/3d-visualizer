@@ -39,14 +39,13 @@ var GuiControls = function(){
     this.square = false;
     this.infinity = false;
     this.longDonut2 = false;
-
 };
 
 var matrix = new GuiControls();
 
 var gui = new dat.GUI();
 gui.closed = true;
-gui.add(matrix, 'spacing', 0, 50).step(0.1).name('Particle Spacing');
+// gui.add(matrix, 'spacing', 0, 50).step(0.1).name('Particle Spacing');
 gui.add(matrix, 'angle', 0, 25).step(0.1).name('Particle Angle');
 gui.add(matrix, 'animationSpeed', 0.0000001, 0.01).step(0.00001).name('Animation Speed');
 gui.add(matrix, 'intensity', 0.5, 5).step(0.1).name('Reaction Intensity');
@@ -120,14 +119,6 @@ function render() {
         var n = 1;
         n +=2;
 
-        // point.geometry.vertices[0].x *= Math.sin(j/10);
-        // point.geometry.vertices[0].y *= Math.sin(j/10);
-        // point.geometry.vertices[0].z *= Math.sin(j/10);
-
-        // point.position.x *= Math.sin(j);
-        // point.position.y *= Math.sin(j);
-        // point.position.z *= Math.sin(j);
-
         var timer = Date.now() - start;
         point.geometry.colorsNeedUpdate = true;
         point.material.size = 0.33 + (timeFloatData[j]/2);
@@ -166,14 +157,14 @@ function render() {
 
         // OG
         if(matrix.sphere){
-            matrix.spacing = 15;
+            matrix.spacing = 15 || matrix.spacing;
             point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j));
             point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
             point.position.z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle));
         }
         //donut
         else if(matrix.donut){
-            matrix.spacing = 10;
+            matrix.spacing = 10 || matrix.spacing;
             point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j) + Math.cos(j));
             point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
             point.position.z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle) + Math.sin(j));
@@ -181,35 +172,35 @@ function render() {
 
         // long donut -- 14.3
         else if(matrix.longDonut){
-            matrix.spacing = 10;
+            matrix.spacing = 9 || matrix.spacing;
             point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) + Math.cos(j));
             point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
             point.position.z = matrix.spacing * (Math.sin(j) + Math.sin(j/matrix.angle));
         }
         // perogi
         else if(matrix.perogi){
-            matrix.spacing = 15;
+            matrix.spacing = 15 || matrix.spacing;
             point.position.x = matrix.spacing * (Math.cos(j/matrix.angle) * Math.cos(j));
             point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
             point.position.z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle));
         }
         // square thing
         else if(matrix.square){
-            matrix.spacing = 10;
+            matrix.spacing = 10 || matrix.spacing;
             point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j) + Math.sin(j));
             point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
             point.position.z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle) + Math.cos(j));
         }
         // tighter infinity -- remove z matrix rotaiton for this
         else if(matrix.infinity){
-            matrix.spacing = 10;
+            matrix.spacing = 10 || matrix.spacing;
             point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j) + Math.cos(2*j/matrix.angle));
             point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
             point.position.z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle) + Math.sin(2*j/matrix.angle));
         }
         // also a long donut
         else if(matrix.longDonut2){
-            matrix.spacing = 10;
+            matrix.spacing = 10 || matrix.spacing;
             point.position.x = matrix.spacing * (Math.cos(j/matrix.angle) + Math.cos(j));
             point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
             point.position.z = matrix.spacing * (Math.sin(j) + Math.sin(j/matrix.angle));
@@ -227,10 +218,6 @@ function render() {
 
     }
     matrix.angle += matrix.animationSpeed;
-    // vertex.z = 20 * Math.sin(i/10);
-    // vertex.y = 20 * Math.cos(i/10);
-    // // vertex.y = i/100 * Math.cos(i/10) - i/100 * Math.sin(i/10);
-    // vertex.x = 20 * Math.tan(i/100);
 
     var x = camera.position.x;
     var z = camera.position.z;
@@ -332,23 +319,3 @@ function onKeyDown(e) {
             break;
     }
 }
-
-
-// var neither = [];
-// var two = [];
-// var three= [];
-// for (var j = 0; j < 2048; j++){
-//
-//     if (j%3 !== 0 && j%2 !==0){
-//         neither.push(j)
-//     }
-//     else if (j%3 === 0){
-//         two.push(j);
-//     }
-//     else if(j%2 === 0){
-//         three.push(j)
-//     }
-//     console.log(neither, 'neither');
-//     console.log(two, 'two');
-//     console.log(three, 'three');
-// }
