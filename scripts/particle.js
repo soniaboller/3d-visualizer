@@ -28,10 +28,10 @@ var GuiControls = function(){
     this.animationSpeed = 0.00001;
     this.intensity = 1;
     this.zoomSpeed = 0.01;
-    this.R = 0;
-    this.G = 0;
-    this.B = 0;
-    this.colorIntensity = 0.33;
+    // this.R = 0;
+    // this.G = 0;
+    // this.B = 0;
+    this.colorIntensity = 0.66;
     this.rotationSpeed = 0.0001;
     this.sphere = true;
     this.donut = false;
@@ -40,10 +40,12 @@ var GuiControls = function(){
     this.square = false;
     this.quadangle = false;
     this.infinity = false;
+    this.hourglass = false;
+    this.spade = false;
     this.longDonut2 = false;
-    // this.particleOne = [0, 0, 0];
-    // this.particleTwo = [0, 0, 0];
-    // this.particleThree = [0, 0, 0];
+    this.particleOne = 0x00ff00;
+    this.particleTwo = 0x0000ff;
+    this.particleThree = 0xff0000;
 
 };
 
@@ -55,12 +57,12 @@ gui.closed = true;
 gui.add(matrix, 'angle', 0, 25).step(0.1).name('Particle Angle');
 gui.add(matrix, 'animationSpeed', 0.0000001, 0.01).step(0.00001).name('Animation Speed');
 gui.add(matrix, 'intensity', 0.5, 5).step(0.1).name('Reaction Intensity');
-gui.add(matrix, 'colorIntensity', 0.25, 5).step(0.25).name('Color Intensity');
+gui.add(matrix, 'colorIntensity', 0.25, 5).step(0.01).name('Color Intensity');
 gui.add(matrix, 'zoomSpeed', 0.001, 0.1).step(0.001).name('Zoom Speed');
 gui.add(matrix, 'rotationSpeed', 0, 0.1).step(0.000005).name('Z-index Rotation Speed');
-// gui.addColor(matrix, 'particleOne');
-// gui.addColor(matrix, 'particleTwo');
-// gui.addColor(matrix, 'particleThree');
+gui.addColor(matrix, 'particleOne').name('Color 1');
+gui.addColor(matrix, 'particleTwo').name('Color 2');
+gui.addColor(matrix, 'particleThree').name('Color 3');
 
 var stats = new Stats();
 stats.showPanel( 0 );
@@ -77,9 +79,10 @@ function init() {
         // // // vertex.y = i/100 * Math.cos(i/10) - i/100 * Math.sin(i/10);
         geometry.vertices.push(vertex);
         // geometry.colors.push(new THREE.Color(purpleColors[ Math.floor(Math.random() * purpleColors.length) ]));
-        geometry.colors.push(new THREE.Color(0xffffff));
+        // geometry.colors.push(new THREE.Color(0xffffff));
         var material = new THREE.PointsMaterial( {
-            vertexColors: THREE.VertexColors,
+            color: 0xffffff,
+            // vertexColors: THREE.VertexColors,
             depthTest: true,
             opacity: 1,
             sizeAttenuation: true
@@ -128,30 +131,65 @@ function render() {
 
     for (var j = 0; j < points.length; j++){
         var point = points[j];
+        var r, g, b, intensity;
         point.geometry.colorsNeedUpdate = true;
         // var timer = Date.now() - start;
         point.material.size = 0.4 + (timeFloatData[j]/2.5);
 
         if (j%3 !== 0 && j%2 !==0){
-            // point.material.color.set(matrix.particleOne);
+            // point.geometry.vertexColors.set(matrix.particleOne)
+            point.material.color.set(matrix.particleOne);
+            // console.log(point.material.color.r);
+            r = point.material.color.r;
+            g = point.material.color.g;
+            b = point.material.color.b;
+
+            intensity = timeFloatData[j] * matrix.colorIntensity;
+
+            point.material.color.setRGB((r + intensity), (g + intensity), (b + intensity));
+
             // this stream mixes with the next stream
-            point.geometry.colors[0].r = matrix.R + (timeFloatData[j] * matrix.colorIntensity);
-            point.geometry.colors[0].g = 1;
-            point.geometry.colors[0].b = matrix.B + (timeFloatData[j] * matrix.colorIntensity);
+            // point.material.color.r = point.material.color.r + (timeFloatData[j] * matrix.colorIntensity);
+            // point.material.color.g = point.material.color.g + (timeFloatData[j] * matrix.colorIntensity);
+            // point.material.color.b = point.material.color.b + (timeFloatData[j] * matrix.colorIntensity);
+            // point.geometry.colors[0].g = matrix.G + (timeFloatData[j] * matrix.colorIntensity);
+            // point.geometry.colors[0].b = matrix.B + (timeFloatData[j] * matrix.colorIntensity);
+            // point.geometry.colors[0].r = matrix.R + (timeFloatData[j] * matrix.colorIntensity);
+            // point.geometry.colors[0].g = 1;
+            // point.geometry.colors[0].b = matrix.B + (timeFloatData[j] * matrix.colorIntensity);
         }
         else if (j%2 === 0){
-            // point.material.color.set(matrix.particleTwo);
+            // point.geometry.vertexColors.set(matrix.particleTwo)
+            point.material.color.set(matrix.particleTwo);
+
+            r = point.material.color.r;
+            g = point.material.color.g;
+            b = point.material.color.b;
+
+            intensity = timeFloatData[j] * matrix.colorIntensity;
+
+            point.material.color.setRGB((r + intensity), (g + intensity), (b + intensity));
+
             // point.geometry.setColor(matrix.particleTwo);
-            point.geometry.colors[0].r = matrix.R + (timeFloatData[j] * matrix.colorIntensity);
-            point.geometry.colors[0].g = matrix.G + (timeFloatData[j] * matrix.colorIntensity);
-            point.geometry.colors[0].b = 1;
+            // point.geometry.colors[0].r = matrix.R + (timeFloatData[j] * matrix.colorIntensity);
+            // point.geometry.colors[0].g = matrix.G + (timeFloatData[j] * matrix.colorIntensity);
+            // point.geometry.colors[0].b = 1;
         }
         else if(j%3 === 0){
-            // point.material.color.set(matrix.particleThree);
+            // point.geometry.vertexColors.set(matrix.particleThree)
+            point.material.color.set(matrix.particleThree);
+
+            r = point.material.color.r;
+            g = point.material.color.g;
+            b = point.material.color.b;
+
+            intensity = timeFloatData[j] * matrix.colorIntensity;
+
+            point.material.color.setRGB((r + intensity), (g + intensity), (b + intensity));
             // this is a dominant color
-            point.geometry.colors[0].r = 1;
-            point.geometry.colors[0].g = matrix.G + (timeFloatData[j] * matrix.colorIntensity);
-            point.geometry.colors[0].b = matrix.B + (timeFloatData[j] * matrix.colorIntensity);
+            // point.geometry.colors[0].r = 1;
+            // point.geometry.colors[0].g = matrix.G + (timeFloatData[j] * matrix.colorIntensity);
+            // point.geometry.colors[0].b = matrix.B + (timeFloatData[j] * matrix.colorIntensity);
         }
 
         // var R = matrix.R - (timeFloatData[j]);
@@ -165,6 +203,13 @@ function render() {
         // point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
         // point.position.z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle) + Math.sin(j));
         // point.position.z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle)) + (Math.abs( Math.cos( timer * 0.002 ) ));
+
+
+        // matrix.spacing = 15 || matrix.spacing;
+        // point.position.x = matrix.spacing * (Math.pow(Math.sin(j), 3));
+        // point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) * (2*Math.sin(j)*Math.sin(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
+        // point.position.z = (matrix.spacing/2) * (Math.cos(j)) - (5 * Math.cos(2 * j)) - (2 * Math.cos(3 * j)) - Math.cos(4 * j);
+
 
         // OG
         if(matrix.sphere){
@@ -216,25 +261,36 @@ function render() {
             point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
             point.position.z = matrix.spacing * (Math.sin(j/matrix.angle) * Math.sin(j) + Math.sin(2*j/matrix.angle));
         }
-        // also a long donut
-        else if(matrix.longDonut2){
-            matrix.spacing = 10 || matrix.spacing;
-            point.position.x = matrix.spacing * (Math.cos(j/matrix.angle) + Math.cos(j));
-            point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
-            point.position.z = matrix.spacing * (Math.sin(j/matrix.angle) + Math.sin(j));
+        // hourglass
+        else if(matrix.hourglass){
+            matrix.spacing = 15 || matrix.spacing;
+            point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j));
+            point.position.y = matrix.spacing * (Math.sin(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
+            point.position.z = matrix.spacing * (Math.sin(j/matrix.angle) * Math.sin(j));
         }
+        // spade
+        else if(matrix.spade){
+            matrix.spacing = 10 || matrix.spacing;
+            point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) * (2 * Math.cos(j))) * Math.sin(j);
+            point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity) + (10 * Math.cos(j));
+            point.position.z = matrix.spacing * (Math.sin(j/matrix.angle)) * (2 * Math.sin(j)) * Math.sin(j);
+        }
+
+
+        // also a long donut
+        // else if(matrix.longDonut2){
+        //     matrix.spacing = 10 || matrix.spacing;
+        //     point.position.x = matrix.spacing * (Math.cos(j/matrix.angle) + Math.cos(j));
+        //     point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
+        //     point.position.z = matrix.spacing * (Math.sin(j/matrix.angle) + Math.sin(j));
+        // }
+
 
         // hourglass
         // matrix.spacing = 15 || matrix.spacing;
         // point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j));
         // point.position.y = matrix.spacing * (Math.sin(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
         // point.position.z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle));
-
-        //quadangle!!
-        // matrix.spacing = 10 || matrix.spacing;
-        // point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j) + Math.sin(j));
-        // point.position.y = matrix.spacing * (Math.sin(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
-        // point.position.z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle) + Math.cos(j));
 
         // spade
         // point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j))*Math.sin(j);
@@ -287,7 +343,8 @@ function onKeyDown(e) {
             matrix.square = false;
             matrix.quadangle = false;
             matrix.infinity = false;
-            matrix.longDonut2 = false;
+            matrix.hourglass = false;
+            matrix.spade = false;
             break;
         case 50:
             //2
@@ -298,7 +355,8 @@ function onKeyDown(e) {
             matrix.square = false;
             matrix.quadangle = false;
             matrix.infinity = false;
-            matrix.longDonut2 = false;
+            matrix.hourglass = false;
+            matrix.spade = false;
             break;
         case 51:
             //3
@@ -309,7 +367,8 @@ function onKeyDown(e) {
             matrix.square = false;
             matrix.quadangle = false;
             matrix.infinity = false;
-            matrix.longDonut2 = false;
+            matrix.hourglass = false;
+            matrix.spade = false;
             break;
         case 52:
             //4
@@ -320,7 +379,8 @@ function onKeyDown(e) {
             matrix.square = false;
             matrix.quadangle = false;
             matrix.infinity = false;
-            matrix.longDonut2 = false;
+            matrix.hourglass = false;
+            matrix.spade = false;
             break;
         case 53:
             //5
@@ -331,7 +391,8 @@ function onKeyDown(e) {
             matrix.square = true;
             matrix.quadangle = false;
             matrix.infinity = false;
-            matrix.longDonut2 = false;
+            matrix.hourglass = false;
+            matrix.spade = false;
             break;
         case 54:
             //6
@@ -342,20 +403,10 @@ function onKeyDown(e) {
             matrix.square = false;
             matrix.quadangle = true;
             matrix.infinity = false;
-            matrix.longDonut2 = false;
+            matrix.hourglass = false;
+            matrix.spade = false;
             break;
         case 55:
-            //6
-            matrix.sphere = false;
-            matrix.donut = false;
-            matrix.longDonut = false;
-            matrix.perogi = false;
-            matrix.square = false;
-            matrix.quadangle = false;
-            matrix.infinity = true;
-            matrix.longDonut2 = false;
-            break;
-        case 56:
             //7
             matrix.sphere = false;
             matrix.donut = false;
@@ -363,8 +414,33 @@ function onKeyDown(e) {
             matrix.perogi = false;
             matrix.square = false;
             matrix.quadangle = false;
+            matrix.infinity = true;
+            matrix.hourglass = false;
+            matrix.spade = false;
+            break;
+        case 56:
+            //8
+            matrix.sphere = false;
+            matrix.donut = false;
+            matrix.longDonut = false;
+            matrix.perogi = false;
+            matrix.square = false;
+            matrix.quadangle = false;
             matrix.infinity = false;
-            matrix.longDonut2 = true;
+            matrix.hourglass = true;
+            matrix.spade = false;
+            break;
+        case 57:
+            //9
+            matrix.sphere = false;
+            matrix.donut = false;
+            matrix.longDonut = false;
+            matrix.perogi = false;
+            matrix.square = false;
+            matrix.quadangle = false;
+            matrix.infinity = false;
+            matrix.hourglass = false;
+            matrix.spade = true;
             break;
     }
 }
