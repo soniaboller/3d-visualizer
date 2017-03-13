@@ -7,7 +7,6 @@ var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 var start = Date.now();
-var xSeparation = 1.05, ySeparation = 1.05, xNum = 45, yNum = 45,
 
 container = document.createElement('div');
 container.setAttribute('id', 'container');
@@ -21,6 +20,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.autoClearColor = true;
 container.appendChild(renderer.domElement);
 controls = new THREE.OrbitControls( camera, renderer.domElement );
+container.addEventListener('click', rendererClick, false);
 
 var GuiControls = function(){
     this.spacing = 15;
@@ -28,10 +28,7 @@ var GuiControls = function(){
     this.animationSpeed = 0.00001;
     this.intensity = 1;
     this.zoomSpeed = 0.01;
-    // this.R = 0;
-    // this.G = 0;
-    // this.B = 0;
-    this.colorIntensity = 0.66;
+    this.colorIntensity = 0.5;
     this.rotationSpeed = 0.0001;
     this.sphere = true;
     this.donut = false;
@@ -42,7 +39,6 @@ var GuiControls = function(){
     this.infinity = false;
     this.hourglass = false;
     this.spade = false;
-    this.longDonut2 = false;
     this.particleOne = 0x00ff00;
     this.particleTwo = 0x0000ff;
     this.particleThree = 0xff0000;
@@ -101,6 +97,7 @@ function init() {
     document.addEventListener('mousemove', onMouseMove, false);
     window.addEventListener('resize', onWindowResize, false);
     document.addEventListener('keydown', onKeyDown, false);
+
 }
 
 function onWindowResize() {
@@ -131,73 +128,32 @@ function render() {
 
     for (var j = 0; j < points.length; j++){
         var point = points[j];
-        var r, g, b, intensity;
+        var r, g, b;
+        var intensity = timeFloatData[j] * matrix.colorIntensity;
         point.geometry.colorsNeedUpdate = true;
         // var timer = Date.now() - start;
         point.material.size = 0.4 + (timeFloatData[j]/2.5);
-
         if (j%3 !== 0 && j%2 !==0){
-            // point.geometry.vertexColors.set(matrix.particleOne)
             point.material.color.set(matrix.particleOne);
-            // console.log(point.material.color.r);
             r = point.material.color.r;
             g = point.material.color.g;
             b = point.material.color.b;
-
-            intensity = timeFloatData[j] * matrix.colorIntensity;
-
             point.material.color.setRGB((r + intensity), (g + intensity), (b + intensity));
-
-            // this stream mixes with the next stream
-            // point.material.color.r = point.material.color.r + (timeFloatData[j] * matrix.colorIntensity);
-            // point.material.color.g = point.material.color.g + (timeFloatData[j] * matrix.colorIntensity);
-            // point.material.color.b = point.material.color.b + (timeFloatData[j] * matrix.colorIntensity);
-            // point.geometry.colors[0].g = matrix.G + (timeFloatData[j] * matrix.colorIntensity);
-            // point.geometry.colors[0].b = matrix.B + (timeFloatData[j] * matrix.colorIntensity);
-            // point.geometry.colors[0].r = matrix.R + (timeFloatData[j] * matrix.colorIntensity);
-            // point.geometry.colors[0].g = 1;
-            // point.geometry.colors[0].b = matrix.B + (timeFloatData[j] * matrix.colorIntensity);
         }
         else if (j%2 === 0){
-            // point.geometry.vertexColors.set(matrix.particleTwo)
             point.material.color.set(matrix.particleTwo);
-
             r = point.material.color.r;
             g = point.material.color.g;
             b = point.material.color.b;
-
-            intensity = timeFloatData[j] * matrix.colorIntensity;
-
             point.material.color.setRGB((r + intensity), (g + intensity), (b + intensity));
-
-            // point.geometry.setColor(matrix.particleTwo);
-            // point.geometry.colors[0].r = matrix.R + (timeFloatData[j] * matrix.colorIntensity);
-            // point.geometry.colors[0].g = matrix.G + (timeFloatData[j] * matrix.colorIntensity);
-            // point.geometry.colors[0].b = 1;
         }
         else if(j%3 === 0){
-            // point.geometry.vertexColors.set(matrix.particleThree)
             point.material.color.set(matrix.particleThree);
-
             r = point.material.color.r;
             g = point.material.color.g;
             b = point.material.color.b;
-
-            intensity = timeFloatData[j] * matrix.colorIntensity;
-
             point.material.color.setRGB((r + intensity), (g + intensity), (b + intensity));
-            // this is a dominant color
-            // point.geometry.colors[0].r = 1;
-            // point.geometry.colors[0].g = matrix.G + (timeFloatData[j] * matrix.colorIntensity);
-            // point.geometry.colors[0].b = matrix.B + (timeFloatData[j] * matrix.colorIntensity);
         }
-
-        // var R = matrix.R - (timeFloatData[j]);
-        // var G = matrix.G - (timeFloatData[j]);
-        // var B = matrix.B - (timeFloatData[j]);
-        // point.geometry.colors[0].r = R;
-        // point.geometry.colors[0].g = G;
-        // point.geometry.colors[0].b = B;
 
         // point.position.x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j) + Math.cos(j));
         // point.position.y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
@@ -323,124 +279,133 @@ function render() {
     renderer.render(scene, camera);
 }
 
+function rendererClick(){
+    var inputs = ($('input'));
+    for (var f = 0; f < inputs.length; f++){
+        inputs[f].blur();
+    }
+}
+
 function onKeyDown(e) {
-    switch (e.which) {
-        case 32:
-            if (app.play) {
-                app.audio.pause();
-                app.play = false;
-            } else {
-                app.audio.play();
-                app.play = true;
-            }
-            break;
-        case 49:
-            //1
-            matrix.sphere = true;
-            matrix.donut = false;
-            matrix.longDonut = false;
-            matrix.perogi = false;
-            matrix.square = false;
-            matrix.quadangle = false;
-            matrix.infinity = false;
-            matrix.hourglass = false;
-            matrix.spade = false;
-            break;
-        case 50:
-            //2
-            matrix.sphere = false;
-            matrix.donut = true;
-            matrix.longDonut = false;
-            matrix.perogi = false;
-            matrix.square = false;
-            matrix.quadangle = false;
-            matrix.infinity = false;
-            matrix.hourglass = false;
-            matrix.spade = false;
-            break;
-        case 51:
-            //3
-            matrix.sphere = false;
-            matrix.donut = false;
-            matrix.longDonut = true;
-            matrix.perogi = false;
-            matrix.square = false;
-            matrix.quadangle = false;
-            matrix.infinity = false;
-            matrix.hourglass = false;
-            matrix.spade = false;
-            break;
-        case 52:
-            //4
-            matrix.sphere = false;
-            matrix.donut = false;
-            matrix.longDonut = false;
-            matrix.perogi = true;
-            matrix.square = false;
-            matrix.quadangle = false;
-            matrix.infinity = false;
-            matrix.hourglass = false;
-            matrix.spade = false;
-            break;
-        case 53:
-            //5
-            matrix.sphere = false;
-            matrix.donut = false;
-            matrix.longDonut = false;
-            matrix.perogi = false;
-            matrix.square = true;
-            matrix.quadangle = false;
-            matrix.infinity = false;
-            matrix.hourglass = false;
-            matrix.spade = false;
-            break;
-        case 54:
-            //6
-            matrix.sphere = false;
-            matrix.donut = false;
-            matrix.longDonut = false;
-            matrix.perogi = false;
-            matrix.square = false;
-            matrix.quadangle = true;
-            matrix.infinity = false;
-            matrix.hourglass = false;
-            matrix.spade = false;
-            break;
-        case 55:
-            //7
-            matrix.sphere = false;
-            matrix.donut = false;
-            matrix.longDonut = false;
-            matrix.perogi = false;
-            matrix.square = false;
-            matrix.quadangle = false;
-            matrix.infinity = true;
-            matrix.hourglass = false;
-            matrix.spade = false;
-            break;
-        case 56:
-            //8
-            matrix.sphere = false;
-            matrix.donut = false;
-            matrix.longDonut = false;
-            matrix.perogi = false;
-            matrix.square = false;
-            matrix.quadangle = false;
-            matrix.infinity = false;
-            matrix.hourglass = true;
-            matrix.spade = false;
-            break;
-        case 57:
-            //9
-            matrix.sphere = false;
-            matrix.donut = false;
-            matrix.longDonut = false;
-            matrix.perogi = false;
-            matrix.square = false;
-            matrix.quadangle = false;
-            matrix.infinity = false;
-            matrix.hourglass = false;
-            matrix.spade = true;
-            break;
+    if ( $('input:focus').length === 0 ) {
+        switch (e.which) {
+            case 32:
+                if (app.play) {
+                    app.audio.pause();
+                    app.play = false;
+                } else {
+                    app.audio.play();
+                    app.play = true;
+                }
+                break;
+            case 49:
+                //1
+                matrix.sphere = true;
+                matrix.donut = false;
+                matrix.longDonut = false;
+                matrix.perogi = false;
+                matrix.square = false;
+                matrix.quadangle = false;
+                matrix.infinity = false;
+                matrix.hourglass = false;
+                matrix.spade = false;
+                break;
+            case 50:
+                //2
+                matrix.sphere = false;
+                matrix.donut = true;
+                matrix.longDonut = false;
+                matrix.perogi = false;
+                matrix.square = false;
+                matrix.quadangle = false;
+                matrix.infinity = false;
+                matrix.hourglass = false;
+                matrix.spade = false;
+                break;
+            case 51:
+                //3
+                matrix.sphere = false;
+                matrix.donut = false;
+                matrix.longDonut = true;
+                matrix.perogi = false;
+                matrix.square = false;
+                matrix.quadangle = false;
+                matrix.infinity = false;
+                matrix.hourglass = false;
+                matrix.spade = false;
+                break;
+            case 52:
+                //4
+                matrix.sphere = false;
+                matrix.donut = false;
+                matrix.longDonut = false;
+                matrix.perogi = true;
+                matrix.square = false;
+                matrix.quadangle = false;
+                matrix.infinity = false;
+                matrix.hourglass = false;
+                matrix.spade = false;
+                break;
+            case 53:
+                //5
+                matrix.sphere = false;
+                matrix.donut = false;
+                matrix.longDonut = false;
+                matrix.perogi = false;
+                matrix.square = true;
+                matrix.quadangle = false;
+                matrix.infinity = false;
+                matrix.hourglass = false;
+                matrix.spade = false;
+                break;
+            case 54:
+                //6
+                matrix.sphere = false;
+                matrix.donut = false;
+                matrix.longDonut = false;
+                matrix.perogi = false;
+                matrix.square = false;
+                matrix.quadangle = true;
+                matrix.infinity = false;
+                matrix.hourglass = false;
+                matrix.spade = false;
+                break;
+            case 55:
+                //7
+                matrix.sphere = false;
+                matrix.donut = false;
+                matrix.longDonut = false;
+                matrix.perogi = false;
+                matrix.square = false;
+                matrix.quadangle = false;
+                matrix.infinity = true;
+                matrix.hourglass = false;
+                matrix.spade = false;
+                break;
+            case 56:
+                //8
+                matrix.sphere = false;
+                matrix.donut = false;
+                matrix.longDonut = false;
+                matrix.perogi = false;
+                matrix.square = false;
+                matrix.quadangle = false;
+                matrix.infinity = false;
+                matrix.hourglass = true;
+                matrix.spade = false;
+                break;
+            case 57:
+                //9
+                matrix.sphere = false;
+                matrix.donut = false;
+                matrix.longDonut = false;
+                matrix.perogi = false;
+                matrix.square = false;
+                matrix.quadangle = false;
+                matrix.infinity = false;
+                matrix.hourglass = false;
+                matrix.spade = true;
+                break;
+        }
     }
 }
