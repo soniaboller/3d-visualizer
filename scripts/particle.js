@@ -7,7 +7,7 @@ var mouseX = 0, mouseY = 0;
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 var start = Date.now();
-var geometry, points;
+var geometry, points, material;
 
 container = document.createElement('div');
 container.setAttribute('id', 'container');
@@ -26,11 +26,11 @@ container.addEventListener('click', rendererClick, false);
 var GuiControls = function(){
     this.spacing = 15;
     this.angle = 0.975000;
-    this.animationSpeed = 0.00001;
-    this.intensity = 1;
-    this.zoomSpeed = 0.01;
-    this.colorIntensity = 0.5;
-    this.rotationSpeed = 0.0001;
+    this.animationSpeed = 0.06;
+    this.intensity = 0.8;
+    this.zoomSpeed = 8;
+    this.colorIntensity = 0.25;
+    this.rotationSpeed = 1;
     this.sphere = true;
     this.donut = false;
     this.longDonut = false;
@@ -43,6 +43,7 @@ var GuiControls = function(){
     this.particleOne = 0x00ff00;
     this.particleTwo = 0x0000ff;
     this.particleThree = 0xff0000;
+    this.sizeIntensity = 2.5;
 
 };
 
@@ -52,11 +53,12 @@ var gui = new dat.GUI();
 gui.closed = true;
 // gui.add(matrix, 'spacing', 0, 50).step(0.1).name('Particle Spacing');
 gui.add(matrix, 'angle', 0, 25).step(0.1).name('Particle Angle');
-gui.add(matrix, 'animationSpeed', 0.0000001, 0.01).step(0.00001).name('Animation Speed');
-gui.add(matrix, 'intensity', 0.5, 5).step(0.1).name('Reaction Intensity');
-gui.add(matrix, 'colorIntensity', 0.25, 5).step(0.01).name('Color Intensity');
-gui.add(matrix, 'zoomSpeed', 0.001, 0.1).step(0.001).name('Zoom Speed');
-gui.add(matrix, 'rotationSpeed', 0, 0.1).step(0.000005).name('Z-index Rotation Speed');
+gui.add(matrix, 'animationSpeed', 0.01, 10).step(0.01).name('Animation Speed');
+gui.add(matrix, 'intensity', 0.5, 5).step(0.1).name('Vibration Intensity');
+gui.add(matrix, 'colorIntensity', 0, 5).step(0.01).name('Flash Intensity');
+gui.add(matrix, 'sizeIntensity', 0, 15).step(0.5).name('Size Intensity');
+gui.add(matrix, 'zoomSpeed', 0, 25).step(0.1).name('Zoom Speed');
+gui.add(matrix, 'rotationSpeed', 0, 25).step(0.1).name('Z-index Rotation Speed');
 gui.addColor(matrix, 'particleOne').name('Color 1');
 gui.addColor(matrix, 'particleTwo').name('Color 2');
 gui.addColor(matrix, 'particleThree').name('Color 3');
@@ -68,31 +70,32 @@ init();
 
 function init() {
     geometry = new THREE.Geometry();
+    // material = new THREE.PointsMaterial({
+    //     vertexColors: THREE.VertexColors,
+    //     depthTest: true,
+    //     opacity: 1,
+    //     sizeAttenuation: true
+    // } );
     for (var i = 0; i < 2048; i++) {
-        var vertex = new THREE.Vector3(20 * Math.sin(i/10) * Math.cos(i), 20 * Math.cos(i/10), 20 * Math.sin(i) * Math.sin(i/10));
-        // vertex.x = 20 * Math.sin(i/10) * Math.cos(i);
-        // vertex.y = 20 * Math.cos(i/10);
-        // vertex.z = 20 * Math.sin(i) * Math.sin(i/10);
-        // // // vertex.y = i/100 * Math.cos(i/10) - i/100 * Math.sin(i/10);
+        var vertex = new THREE.Vector3();
+        vertex.x = 20 * Math.sin(i/10) * Math.cos(i);
+        vertex.y = 20 * Math.cos(i/10);
+        vertex.z = 20 * Math.sin(i) * Math.sin(i/10);
         geometry.vertices.push(vertex);
-        // geometry.colors.push(new THREE.Color(purpleColors[ Math.floor(Math.random() * purpleColors.length) ]));
         geometry.colors.push(new THREE.Color(0xffffff));
+        var material = new THREE.PointsMaterial( {
+            vertexColors: THREE.VertexColors,
+            needsUpdate: true,
+            depthTest: true,
+            opacity: 1,
+            sizeAttenuation: true
+        } );
+
     }
 
-    var material = new THREE.PointsMaterial( {
-        size: 0.33,
-        vertexColors: THREE.VertexColors,
-        depthTest: true,
-        opacity: 1,
-        sizeAttenuation: true
-    } );
 
     points = new THREE.Points( geometry, material );
-    // particle.position.x = 20 * Math.sin(i/10) * Math.cos(i);
-    // particle.position.y = 20 * Math.cos(i/10);
-    // particle.position.z = 20 * Math.sin(i) * Math.sin(i/10);
     scene.add( points );
-    // points.push( particle );
     // var sphereGeo = new THREE.SphereGeometry( 10, 32, 32 );
     // var sphereMat = new THREE.MeshBasicMaterial( {color: 0xffffff, transparent: true, opacity: 0.33} );
     // var sphere = new THREE.Mesh( sphereGeo, sphereMat );
@@ -136,9 +139,8 @@ function render() {
         var r, g, b;
         var intensity = timeFloatData[j] * matrix.colorIntensity;
         // var timer = Date.now() - start;
-        points.material.size = 0.4 + (timeFloatData[j]/2.5);
+        points.material.size = 0.4 + (timeFloatData[j] * (matrix.sizeIntensity/10));
         if (j%3 !== 0 && j%2 !==0){
-
             points.geometry.colors[j].set(matrix.particleOne);
             r = geometry.colors[j].r;
             g = geometry.colors[j].g;
@@ -179,30 +181,13 @@ function render() {
             // points.material.color.setRGB((r + intensity), (g + intensity), (b + intensity));
         }
 
-        // geometry.vertices[j].x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j) + Math.cos(j));
-        // geometry.vertices[j].y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
-        // geometry.vertices[j].z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle) + Math.sin(j));
-        // geometry.vertices[j].z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle)) + (Math.abs( Math.cos( timer * 0.002 ) ));
-
-
-        // matrix.spacing = 15 || matrix.spacing;
-        // geometry.vertices[j].x = matrix.spacing * (Math.pow(Math.sin(j), 3));
-        // geometry.vertices[j].y = matrix.spacing * (Math.cos(j/matrix.angle)) * (2*Math.sin(j)*Math.sin(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
-        // geometry.vertices[j].z = (matrix.spacing/2) * (Math.cos(j)) - (5 * Math.cos(2 * j)) - (2 * Math.cos(3 * j)) - Math.cos(4 * j);
-
-
         // OG
         if(matrix.sphere){
-
+            matrix.spacing = 15 || matrix.spacing;
             geometry.vertices[j].x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j));
-
             geometry.vertices[j].y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
             geometry.vertices[j].z = matrix.spacing * (Math.sin(j/matrix.angle) * Math.sin(j));
 
-            // matrix.spacing = 15 || matrix.spacing;
-            // geometry.vertices[j].x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j));
-            // geometry.vertices[j].y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
-            // geometry.vertices[j].z = matrix.spacing * (Math.sin(j/matrix.angle) * Math.sin(j));
         }
         //donut
         else if(matrix.donut){
@@ -290,19 +275,17 @@ function render() {
         // geometry.vertices[j].x = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle) / Math.cos(j));
 
     }
-    matrix.angle += matrix.animationSpeed;
+    matrix.angle += (matrix.animationSpeed/10000);
 
     var x = camera.position.x;
-    var z = camera.position.z;
-    camera.position.x = x * Math.cos(matrix.zoomSpeed) - z * Math.sin(matrix.zoomSpeed);
-    camera.position.z = z * Math.cos(matrix.zoomSpeed) + x * Math.sin(matrix.zoomSpeed);
-
-    // var z = camera.position.z;
     var y = camera.position.y;
-    camera.position.y = y * Math.cos(matrix.zoomSpeed) + z * Math.sin(matrix.zoomSpeed);
-    camera.position.z = z * Math.cos(matrix.zoomSpeed) - y * Math.sin(matrix.zoomSpeed);
+    var z = camera.position.z;
+    camera.position.x = x * Math.cos(matrix.zoomSpeed/1000) - z * Math.sin(matrix.zoomSpeed/1000);
+    // camera.position.z = z * Math.cos(matrix.zoomSpeed) + x * Math.sin(matrix.zoomSpeed);
+    camera.position.y = y * Math.cos(matrix.zoomSpeed/1000) + z * Math.sin(matrix.zoomSpeed/1000);
+    camera.position.z = z * Math.cos(matrix.zoomSpeed/1000) - y * Math.sin(matrix.zoomSpeed/1000);
 
-    var rotationMatrix = new THREE.Matrix4().makeRotationZ( Math.PI * matrix.rotationSpeed );
+    var rotationMatrix = new THREE.Matrix4().makeRotationZ( Math.PI * (matrix.rotationSpeed/10000) );
     camera.up.applyMatrix4(rotationMatrix);
 
     camera.lookAt(scene.position);
