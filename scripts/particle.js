@@ -70,12 +70,6 @@ init();
 
 function init() {
     geometry = new THREE.Geometry();
-    // material = new THREE.PointsMaterial({
-    //     vertexColors: THREE.VertexColors,
-    //     depthTest: true,
-    //     opacity: 1,
-    //     sizeAttenuation: true
-    // } );
     for (var i = 0; i < 2048; i++) {
         var vertex = new THREE.Vector3();
         vertex.x = 20 * Math.sin(i/10) * Math.cos(i);
@@ -83,17 +77,14 @@ function init() {
         vertex.z = 20 * Math.sin(i) * Math.sin(i/10);
         geometry.vertices.push(vertex);
         geometry.colors.push(new THREE.Color(0xffffff));
-        var material = new THREE.PointsMaterial( {
-            vertexColors: THREE.VertexColors,
-            needsUpdate: true,
-            depthTest: true,
-            opacity: 1,
-            sizeAttenuation: true
-        } );
-
     }
-
-
+    material = new THREE.PointsMaterial( {
+        vertexColors: THREE.VertexColors,
+        needsUpdate: true,
+        depthTest: true,
+        opacity: 1,
+        sizeAttenuation: true
+    } );
     points = new THREE.Points( geometry, material );
     scene.add( points );
     // var sphereGeo = new THREE.SphereGeometry( 10, 32, 32 );
@@ -103,7 +94,6 @@ function init() {
     document.addEventListener('mousemove', onMouseMove, false);
     window.addEventListener('resize', onWindowResize, false);
     document.addEventListener('keydown', onKeyDown, false);
-
 }
 
 function onWindowResize() {
@@ -246,8 +236,7 @@ function render() {
             geometry.vertices[j].y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity) + (10 * Math.cos(j));
             geometry.vertices[j].z = matrix.spacing * (Math.sin(j/matrix.angle)) * (2 * Math.sin(j)) * Math.sin(j);
         }
-
-
+        
         // also a long donut
         // else if(matrix.longDonut2){
         //     matrix.spacing = 10 || matrix.spacing;
@@ -255,19 +244,6 @@ function render() {
         //     geometry.vertices[j].y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
         //     geometry.vertices[j].z = matrix.spacing * (Math.sin(j/matrix.angle) + Math.sin(j));
         // }
-
-
-        // hourglass
-        // matrix.spacing = 15 || matrix.spacing;
-        // geometry.vertices[j].x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j));
-        // geometry.vertices[j].y = matrix.spacing * (Math.sin(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity);
-        // geometry.vertices[j].z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle));
-
-        // spade
-        // geometry.vertices[j].x = matrix.spacing * (Math.sin(j/matrix.angle) * Math.cos(j))*Math.sin(j);
-        // geometry.vertices[j].y = matrix.spacing * (Math.cos(j/matrix.angle)) + (timeFloatData[j] * matrix.intensity) +(5*Math.cos(j));
-        // geometry.vertices[j].z = matrix.spacing * (Math.sin(j) * Math.sin(j/matrix.angle))*Math.sin(j);
-
 
         // star thang rotation speed = 0.00413
         // geometry.vertices[j].y = matrix.spacing * (Math.cos(j/matrix.angle) * Math.cos(j) / Math.sin(j));
