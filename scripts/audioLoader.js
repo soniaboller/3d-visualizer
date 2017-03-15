@@ -4,14 +4,9 @@ var buffer;
 var analyser;
 
 window.onload = function () {
-
-    if(window.innerWidth < 780){
-        app.animate();
-        console.log('hit')
-    }
-
-    var notification = document.getElementById('notification');
-    notification.addEventListener('click', getMicInput, false);
+    var info = $('#info');
+    info.velocity('fadeIn', { delay: 250, duration: 1500 });
+    info.on('click', getMicInput);
 
     // app.init();
     // console.log('audio loader connected');
@@ -20,13 +15,13 @@ window.onload = function () {
     window.addEventListener('dragover', onDrag, false);
 
     function onDrag(e) {
+        info.velocity('fadeOut', { duration: 150 });
         e.stopPropagation();
         e.preventDefault();
         return false;
     }
 
     function onDrop(e) {
-        notification.classList.add('hidden');
         e.stopPropagation();
         e.preventDefault();
         var droppedFiles = e.dataTransfer.files;
@@ -49,7 +44,7 @@ window.onload = function () {
         analyser = app.ctx.createAnalyser(); // creates analyserNode
         source.connect(app.ctx.destination); // connects the audioNode to the audioDestinationNode (computer speakers)
         source.connect(analyser); // connects the analyser node to the audioNode and the audioDestinationNode
-        app.animate();
+        // app.animate();
     }
 
     function getMicInput(){
@@ -58,13 +53,14 @@ window.onload = function () {
             source = app.ctx.createBufferSource();
             analyser = app.ctx.createAnalyser();
             analyser.fftSize = 2048;
-            microphone = app.ctx.createMediaStreamSource(stream);
-            microphone.connect(analyser);
-            notification.classList.add('hidden');
-            app.animate();
+            app.microphone = app.ctx.createMediaStreamSource(stream);
+            app.microphone.connect(analyser);
+            info.velocity('fadeOut', { duration: 150 });
+            // app.animate();
         }).catch(function(err) {
             console.log('error', err)
         });
     }
+    app.animate()
 };
 

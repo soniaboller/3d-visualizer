@@ -8,16 +8,38 @@ body {
     color: white;
 }
 
-#notification {
+h1{
+    font-weight: 900;
+    font-size: 2.75em;
+    margin: 1%;
+}
+
+h2, h3, h4, h5, h6, p {
+    font-weight: 100;
+}
+
+
+
+#info {
     z-index: 10000;
-    /*display: none;*/
+    background-color: rgba(0,0,0,0.4);
+    display: none;
     margin: 0 auto;
-    width: 33%;
+    width: 100%;
+    height: 100vh;
     text-align: center;
     letter-spacing: 0.15rem;
     padding-top: 45vh;
     color: #fff;
     font-weight: 100;
+    position: absolute;
+    left: 50%;
+    top: 65%;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 }
 
 .hidden{
