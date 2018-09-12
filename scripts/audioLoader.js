@@ -7,10 +7,7 @@ window.onload = function () {
     var info = $('#info');
     info.velocity('fadeIn', { delay: 250, duration: 1500 });
     info.on('click', getMicInput);
-
-    // app.init();
-    // console.log('audio loader connected');
-
+    
     window.addEventListener('drop', onDrop, false);
     window.addEventListener('dragover', onDrag, false);
 
